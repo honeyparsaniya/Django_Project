@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static%}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="adminHMD professional admin dashboard template">
+  <title>Dashboard | adminHMD</title>
+
+  <link rel="stylesheet" href="{% static 'Dashboard/assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'Dashboard/assets/vendors/bootstrap-icons/bootstrap-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'Dashboard/assets/css/style.css' %}">
+</head>
+
+<body>
+  <div class="admin-shell">
+    <div class="sidebar-backdrop" data-sidebar-close></div>
+      {% comment %} side bar content {% endcomment %}
+      {% include "Dashboard/sidebar.html" %}
+
+    <div class="admin-main">
+{% comment %}      
+      header content {% endcomment %}
+      {% include "Dashboard/header.html" %}
+
+      {% block content %}
+      {% endblock %}
+    <footer class="admin-footer">
+        <div class="container-fluid px-3 px-lg-4">
+          <span>Copyright 2026 adminHMD. <br> Developed by <a target="_blank" class="fw-bold text-success" href="https://github.com/HasanMahmudDev">Md. Hasan Mahmud</a> • Distributed by <a target="_blank" class="fw-bold text-success" href="https://themewagon.com">ThemeWagon</a> </span>
+          <span>Professional dashboard template.</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="{% static 'Dashboard/assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'Dashboard/assets/js/main.js' %}"></script>
+</body>
+</html>

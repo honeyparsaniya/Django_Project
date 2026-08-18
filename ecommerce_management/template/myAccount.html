@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-5">
+
+    <div class="container py-5">
+
+        <!-- Page Heading -->
+        <div class="text-center mb-5">
+
+            <h1 class="display-5 mb-3">
+                My Account
+            </h1>
+
+            <p class="text-muted">
+                Manage your account and personal information
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- ================================================= -->
+            <!-- LEFT PROFILE CARD -->
+            <!-- ================================================= -->
+
+            <div class="col-lg-4">
+
+                <div class="bg-light rounded p-4 text-center">
+
+                    <!-- Profile Image -->
+
+                    {% if account_user.image %}
+
+                    <img src="{{ account_user.image.url }}" alt="Profile Image" class="rounded-circle mb-4" style="
+                                width: 130px;
+                                height: 130px;
+                                object-fit: cover;
+                            ">
+
+                    {% else %}
+
+                    <div class="rounded-circle bg-primary text-white
+                                   d-flex align-items-center justify-content-center
+                                   mx-auto mb-4" style="
+                                width: 130px;
+                                height: 130px;
+                                font-size: 50px;
+                            ">
+                        <i class="fas fa-user"></i>
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- Username -->
+
+                    <h3 class="mb-1">
+                        {{ account_user.username }}
+                    </h3>
+
+
+                    <!-- Contact -->
+
+                    <p class="text-muted mb-3">
+                        {{ account_user.contact_number }}
+                    </p>
+
+
+                    <!-- Role -->
+
+                    <span class="badge bg-primary px-3 py-2">
+                        {{ account_user.get_role_display }}
+                    </span>
+
+
+                    <hr class="my-4">
+
+
+                    <!-- Logout -->
+
+                    <a href="{% url 'logout' %}" class="btn btn-danger rounded-pill px-4">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Logout
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- RIGHT ACCOUNT INFORMATION -->
+            <!-- ================================================= -->
+
+            <div class="col-lg-8">
+
+                <div class="bg-light rounded p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-center mb-4">
+
+                        <h3 class="mb-0">
+                            Account Information
+                        </h3>
+
+                        <a href="{% url 'edit_profile' %}" class="btn btn-primary rounded-pill px-4">
+                            <i class="fas fa-edit me-2"></i>
+                            
+                            Edit
+                        </a>
+                    </div>
+
+
+                    <!-- Username -->
+
+                    <div class="row mb-4">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-muted">
+                                Username
+                            </label>
+
+                            <div class="form-control bg-white">
+                                {{ account_user.username }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-muted">
+                                Email
+                            </label>
+
+                            <div class="form-control bg-white">
+
+                                {% if account_user.email %}
+
+                                {{ account_user.email }}
+
+                                {% else %}
+
+                                Not added
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Contact + Role -->
+
+                    <div class="row mb-4">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-muted">
+                                Contact Number
+                            </label>
+
+                            <div class="form-control bg-white">
+                                {{ account_user.contact_number }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-muted">
+                                Account Type
+                            </label>
+
+                            <div class="form-control bg-white">
+                                {{ account_user.get_role_display }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Account Created -->
+
+                    <div class="row mb-4">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-muted">
+                                Account Created
+                            </label>
+
+                            <div class="form-control bg-white">
+
+                                {{ account_user.date_joined|date:"d M Y" }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-muted">
+                                Last Login
+                            </label>
+
+                            <div class="form-control bg-white">
+
+                                {% if account_user.last_login %}
+
+                                {{ account_user.last_login|date:"d M Y, h:i A" }}
+
+                                {% else %}
+
+                                First Login
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================================= -->
+                <!-- ACCOUNT OPTIONS -->
+                <!-- ================================================= -->
+
+                <div class="row g-4 mt-1">
+
+
+                    <!-- Orders -->
+
+                    <div class="col-md-4">
+
+                        <div class="bg-light rounded p-4 text-center">
+
+                            <div class="rounded-circle bg-primary
+                                       d-flex align-items-center
+                                       justify-content-center
+                                       mx-auto mb-3" style="
+                                    width: 60px;
+                                    height: 60px;
+                                ">
+
+                                <i class="fas fa-box text-white"></i>
+
+                            </div>
+
+                            <h5>
+                                My Orders
+                            </h5>
+
+                            <p class="text-muted small">
+                                View your order history
+                            </p>
+
+                            <a href="#" class="btn btn-outline-primary
+                                       rounded-pill px-3">
+                                View Orders
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Wishlist -->
+
+                    <div class="col-md-4">
+
+                        <div class="bg-light rounded p-4 text-center">
+
+                            <div class="rounded-circle bg-primary
+                                       d-flex align-items-center
+                                       justify-content-center
+                                       mx-auto mb-3" style="
+                                    width: 60px;
+                                    height: 60px;
+                                ">
+
+                                <i class="fas fa-heart text-white"></i>
+
+                            </div>
+
+                            <h5>
+                                Wishlist
+                            </h5>
+
+                            <p class="text-muted small">
+                                View your favourite products
+                            </p>
+
+                            <a href="#" class="btn btn-outline-primary
+                                       rounded-pill px-3">
+                                Wishlist
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Cart -->
+
+                    <div class="col-md-4">
+
+                        <div class="bg-light rounded p-4 text-center">
+
+                            <div class="rounded-circle bg-primary
+                                       d-flex align-items-center
+                                       justify-content-center
+                                       mx-auto mb-3" style="
+                                    width: 60px;
+                                    height: 60px;
+                                ">
+
+                                <i class="fas fa-shopping-cart text-white"></i>
+
+                            </div>
+
+                            <h5>
+                                My Cart
+                            </h5>
+
+                            <p class="text-muted small">
+                                Check your shopping cart
+                            </p>
+
+                            <a href="{% url 'cart_page' %}" class="btn btn-outline-primary
+                                       rounded-pill px-3">
+                                View Cart
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}

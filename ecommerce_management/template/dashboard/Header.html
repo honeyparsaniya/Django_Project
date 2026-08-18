@@ -1,0 +1,156 @@
+{% load static %}
+
+<nav class="navbar admin-navbar navbar-expand bg-white">
+
+    <div class="container-fluid px-3 px-lg-4">
+
+        <!-- Sidebar Toggle -->
+        <button
+            class="sidebar-toggle"
+            type="button"
+            data-sidebar-toggle
+            aria-controls="adminSidebar"
+            aria-expanded="true"
+            aria-label="Toggle sidebar"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+
+        <!-- Search -->
+        <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
+            <input
+                class="form-control search-input"
+                type="search"
+                placeholder="Search users, orders, reports"
+                aria-label="Search"
+            >
+        </form>
+
+
+        <!-- Navbar Actions -->
+        <div class="navbar-actions ms-auto">
+
+            <!-- Theme Toggle -->
+            <button
+                class="icon-button theme-toggle"
+                type="button"
+                data-theme-toggle
+                aria-label="Switch color theme"
+                title="Switch color theme"
+            >
+                <i
+                    class="bi bi-moon-stars"
+                    data-theme-icon
+                    aria-hidden="true"
+                ></i>
+            </button>
+
+
+            <!-- Notifications -->
+            <div class="dropdown">
+
+                <button
+                    class="icon-button"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    aria-label="Notifications"
+                >
+                    <span class="notification-dot"></span>
+                    <i class="bi bi-bell" aria-hidden="true"></i>
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-end notification-menu">
+
+                    <div class="dropdown-header fw-bold text-body">
+                        Notifications
+                    </div>
+
+                    <a class="dropdown-item" href="{% url 'users' %}">
+                        <span class="notification-title">
+                            New user registered
+                        </span>
+                        <span class="notification-time">
+                            4 minutes ago
+                        </span>
+                    </a>
+
+                    <a class="dropdown-item" href="{% url 'charts' %}">
+                        <span class="notification-title">
+                            Revenue target reached
+                        </span>
+                        <span class="notification-time">
+                            32 minutes ago
+                        </span>
+                    </a>
+
+                    <a class="dropdown-item" href="{% url 'settings' %}">
+                        <span class="notification-title">
+                            Security review completed
+                        </span>
+                        <span class="notification-time">
+                            1 hour ago
+                        </span>
+                    </a>
+
+                </div>
+            </div>
+
+
+            <!-- Profile -->
+            <div class="dropdown">
+
+                <button
+                    class="profile-button dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                >
+                    <img
+                        class="avatar-img avatar-sm"
+                        src="{% static 'Dashboard/assets/images/avatar/avatar.jpg' %}"
+                        alt="Admin Hasan"
+                    >
+
+                    <span class="profile-name d-none d-sm-inline">
+                        Admin Hasan
+                    </span>
+                </button>
+
+
+                <ul class="dropdown-menu dropdown-menu-end">
+
+                    <li>
+                        <a class="dropdown-item" href="{% url 'profile' %}">
+                            Profile
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{% url 'settings' %}">
+                            Account settings
+                        </a>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            Sign out
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>

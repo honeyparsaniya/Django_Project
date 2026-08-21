@@ -18,7 +18,7 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     path("settings/", SettingsView.as_view(), name="settings"),
     path("tables/", TablesView.as_view(), name="tables"),
-    path("user-details/", UserDetailsView.as_view(), name="user_details"),
+    path("user-details/<int:user_id>/", UserDetailsView.as_view(), name="user_details"),
     path("users/", UsersView.as_view(), name="users"),
 
     path("404/", Create404View.as_view(), name="404"),

@@ -9,10 +9,74 @@ from datetime import timedelta
 import random
 
 from .forms import LoginForm, OTPForm, ProfileUpdateForm
-from .models import OTP
+from .models import OTP, LoginHistory
 
 
 User = get_user_model()
+
+
+class LoginHistoryManager:
+
+    @staticmethod
+    def start(request, user):
+        # Create a login history record for the user
+        history = LoginHistory.objects.create(
+            user=user
+        )
+
+        # Store the history ID in the current session
+        request.session["login_history_id"] = history.id
+
+        return history
+
+    @staticmethod
+    def close(request):
+        # Get the current login history ID from the session
+        history_id = request.session.get("login_history_id")
+
+        # If there is no history ID or user is not authenticated,
+        # remove the session value and stop.
+        if not history_id or not request.user.is_authenticated:
+            request.session.pop("login_history_id", None)
+            return None
+
+        # Find the active login history belonging to
+        # the currently logged-in user.
+        history = LoginHistory.objects.filter(
+            id=history_id,
+            user=request.user,
+            logout_time__isnull=True,
+        ).first()
+
+        if history:
+            # Store logout time
+            history.logout_time = timezone.now()
+
+            # Calculate session duration
+            history.duration = timedelta(
+                seconds=int(
+                    (
+                        history.logout_time
+                        - history.login_time
+                    ).total_seconds()
+                )
+            )
+
+            # Save logout time and duration
+            history.save(
+                update_fields=[
+                    "logout_time",
+                    "duration"
+                ]
+            )
+
+        # Remove history ID from session
+        request.session.pop(
+            "login_history_id",
+            None
+        )
+
+        return history
 
 
 # =========================================================
@@ -267,6 +331,14 @@ class OTPVerifyView(FormView):
             user
         )
 
+        # -------------------------------------------------
+        # Create Login History
+        # -------------------------------------------------
+
+        # Store the history ID so the same record can be closed at logout.
+        LoginHistoryManager.start(self.request, user)
+
+        print("USER:", self.request.user)  
         print("USER:", self.request.user)
         print("AUTHENTICATED:", self.request.user.is_authenticated)
 
@@ -275,17 +347,34 @@ class OTPVerifyView(FormView):
         # -------------------------------------------------
 
         return redirect("index_page")
-    # =========================================================
+
+
+# =========================================================
 # LOGOUT VIEW
 # =========================================================
-
 def LogoutView(request):
 
-    # Logout current user
+    print("\n========== LOGOUT DEBUG ==========")
+    print("USER:", request.user)
+    print("AUTHENTICATED:", request.user.is_authenticated)
+    print("HISTORY ID:", request.session.get("login_history_id"))
+
+    history = LoginHistoryManager.close(request)
+
+    print("HISTORY:", history)
+
+    if history:
+        print("LOGOUT TIME:", history.logout_time)
+        print("DURATION:", history.duration)
+    else:
+        print("❌ HISTORY WAS NOT CLOSED")
+
+    print("==================================\n")
+
     logout(request)
 
-    # Redirect to home page
     return redirect("index_page")
+
 
 # =========================================================
 # MY ACCOUNT VIEW
@@ -338,26 +427,100 @@ class MyAccountView(TemplateView):
 )
 class ProfileUpdateView(FormView):
 
+    # Admin profile template
     template_name = "editProfile.html"
 
+    # Admin profile form
     form_class = ProfileUpdateForm
 
-    def get_form_kwargs(self):
+    
 
-        kwargs = super().get_form_kwargs()
 
-        # Send current logged-in user to ModelForm
-        kwargs["instance"] = self.request.user
+    # =====================================================
+    # GET
+    # =====================================================
 
-        return kwargs
+    def get(self, request, *args, **kwargs):
 
-    def form_valid(self, form):
+        # Create form using currently logged-in admin
+        form = self.form_class(
+            instance=request.user
+        )
 
-        # Save profile information
-        form.save()
+        return self.render_to_response(
+            self.get_context_data(
+                form=form
+            )
+        )
 
-        # Return to My Account page
-        return redirect("my_account")
+
+    # =====================================================
+    # POST
+    # =====================================================
+
+    def post(self, request, *args, **kwargs):
+
+        # Create form with submitted data
+        form = self.form_class(
+            request.POST,
+            request.FILES,
+            instance=request.user
+        )
+
+        # Check form validation
+        if form.is_valid():
+
+            # Save changes to current logged-in admin
+            form.save()
+
+            # Go back to profile page
+            return redirect("my_account")
+
+        # If validation fails
+        return self.render_to_response(
+            self.get_context_data(
+                form=form
+            )
+        )
+
+
+    # =====================================================
+    # CONTEXT DATA
+    # =====================================================
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        # Current logged-in user
+        user = self.request.user
+
+        # Get login history of ONLY this user
+        login_history = LoginHistory.objects.filter(
+            user=user
+        ).order_by(
+            "-login_time"
+        )
+
+        # Send login history to template
+        context["login_history"] = login_history
+
+        return context
+    # =====================================================
+    # CONTEXT DATA
+    # =====================================================
+
+    def get_context_data(self, **kwargs):
+
+        # Get existing context
+        context = super().get_context_data(**kwargs)
+
+        # Get login history of currently logged-in user
+        context["login_history"] = LoginHistory.objects.filter(
+            user=self.request.user
+        ).order_by("-login_time")
+
+        return context
 # =========================================================
 # RESEND OTP VIEW
 # =========================================================
@@ -365,6 +528,7 @@ class ProfileUpdateView(FormView):
 class ResentOtp(FormView):
 
     def get(self, request, *args, **kwargs):
+        
 
         # -------------------------------------------------
         # Get user ID from session
@@ -447,3 +611,4 @@ class ResentOtp(FormView):
         # -------------------------------------------------
 
         return redirect("verify_otp")
+

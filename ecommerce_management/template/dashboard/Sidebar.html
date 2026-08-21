@@ -132,19 +132,36 @@
     </nav>
 
 
-    <!-- Sidebar User -->
-    <div class="sidebar-user">
+ <!-- Sidebar User -->
+{% if request.user.is_authenticated and request.user.role == "admin" %}
 
+<div class="sidebar-user">
+
+    {% if request.user.image %}
         <img
             class="avatar-img avatar-md sidebar-user-avatar"
-            src="{% static 'Dashboard/assets/images/avatar/avatar.jpg' %}"
-            alt="Admin Hasan"
+            src="{{ request.user.image.url }}"
+            alt="{{ request.user.username }}"
         >
+    {% else %}
+        <div class="avatar-img avatar-md sidebar-user-avatar">
+            {{ request.user.username|first|upper }}
+        </div>
+    {% endif %}
 
-        <strong>Admin Hasan</strong>
-        <small>Active Workspace</small>
+    <strong>
+        {% if request.user.first_name %}
+            {{ request.user.first_name }} {{ request.user.last_name }}
+        {% else %}
+            {{ request.user.username }}
+        {% endif %}
+    </strong>
 
-    </div>
+    <small>Admin</small>
+
+</div>
+
+{% endif %}
 
 
     <!-- Sidebar Footer -->

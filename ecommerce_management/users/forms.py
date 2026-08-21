@@ -103,6 +103,131 @@ class ProfileUpdateForm(forms.ModelForm):
 
         model = User
 
+        # -------------------------------------------------
+        # ONLY ADMIN PROFILE EDITABLE FIELDS
+        # -------------------------------------------------
+
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "contact_number",
+            "image",
+        ]
+
+        widgets = {
+
+            # -------------------------------------------------
+            # USERNAME
+            # -------------------------------------------------
+
+            "username": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Username",
+                    "readonly": "readonly",
+                }
+            ),
+
+            # -------------------------------------------------
+            # FIRST NAME
+            # -------------------------------------------------
+
+            "first_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter your first name",
+                }
+            ),
+
+            # -------------------------------------------------
+            # LAST NAME
+            # -------------------------------------------------
+
+            "last_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter your last name",
+                }
+            ),
+
+            # -------------------------------------------------
+            # EMAIL
+            # -------------------------------------------------
+
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter your email",
+                    "autocomplete": "email",
+                }
+            ),
+
+            # -------------------------------------------------
+            # CONTACT NUMBER
+            # -------------------------------------------------
+
+            "contact_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter your 10 digit contact number",
+                    "maxlength": "10",
+                    "minlength": "10",
+                    "type": "tel",
+                    "readonly": "readonly",
+                    "autocomplete": "tel",
+                }
+            ),
+
+            # -------------------------------------------------
+            # PROFILE IMAGE
+            # -------------------------------------------------
+
+            "image": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control",
+                    "accept": "image/*",
+                }
+            ),
+        }
+
+
+    # =====================================================
+    # CONTACT NUMBER VALIDATION
+    # =====================================================
+
+    def clean_contact_number(self):
+
+        contact_number = self.cleaned_data.get(
+            "contact_number",
+            ""
+        ).strip()
+
+        if contact_number:
+
+            if not contact_number.isdigit():
+
+                raise forms.ValidationError(
+                    "Contact number must contain only numbers."
+                )
+
+            if len(contact_number) != 10:
+
+                raise forms.ValidationError(
+                    "Contact number must be exactly 10 digits."
+                )
+
+        return contact_number
+# =========================================================
+# ADD USER FORM
+# =========================================================
+
+class AddUserForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+
         fields = [
             "username",
             "email",
@@ -114,98 +239,49 @@ class ProfileUpdateForm(forms.ModelForm):
 
         widgets = {
 
+            # Username
             "username": forms.TextInput(
                 attrs={
                     "class": "form-control",
+                    "placeholder": "Enter username",
                 }
             ),
 
+            # Email
             "email": forms.EmailInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Enter your email",
+                    "placeholder": "Enter email",
                 }
             ),
 
+            # Contact number
             "contact_number": forms.TextInput(
                 attrs={
                     "class": "form-control",
+                    "placeholder": "Enter contact number",
+                    "maxlength": "10",
                 }
             ),
 
+            # Role
             "role": forms.Select(
                 attrs={
                     "class": "form-select",
                 }
             ),
 
+            # Terms & Conditions
             "read_terms_and_conditions": forms.CheckboxInput(
                 attrs={
                     "class": "form-check-input",
                 }
             ),
 
+            # Profile image
             "image": forms.ClearableFileInput(
                 attrs={
                     "class": "form-control",
                 }
             ),
         }
-
-    def __init__(self, *args, **kwargs):
-
-        # Get current logged-in user
-        user = kwargs.get("instance")
-
-        super().__init__(*args, **kwargs)
-
-        if user:
-
-            # -------------------------------------------------
-            # Username
-            # -------------------------------------------------
-
-            if user.username:
-                self.fields["username"].disabled = True
-
-
-            # -------------------------------------------------
-            # Contact Number
-            # -------------------------------------------------
-
-            if user.contact_number:
-                self.fields["contact_number"].disabled = True
-
-
-            # -------------------------------------------------
-            # Role
-            # -------------------------------------------------
-
-            # User should NOT be able to change role
-            self.fields["role"].disabled = True
-
-
-            # -------------------------------------------------
-            # Email
-            # -------------------------------------------------
-
-            if user.email:
-                self.fields["email"].disabled = True
-
-
-            # -------------------------------------------------
-            # Profile Image
-            # -------------------------------------------------
-
-            if user.image:
-                self.fields["image"].disabled = True
-
-
-            # -------------------------------------------------
-            # Terms & Conditions
-            # -------------------------------------------------
-
-            if user.read_terms_and_conditions:
-                self.fields[
-                    "read_terms_and_conditions"
-                ].disabled = True

@@ -66,10 +66,12 @@
                         <a href="#" class="dropdown-item">My Cart</a>
                         <a href="#" class="dropdown-item">Notifications</a>
                         <a href="#" class="dropdown-item">Account Settings</a>
-                        <a href="{% url 'my_account' %}" class="dropdown-item">My Account</a>
                         
                         {% if user.is_authenticated and user.role == "admin" %}
                         <a  class="dropdown-item" href="{% url 'dashboard' %}">Admin Dashboard</a>
+                        {% else %}
+                                                <a href="{% url 'my_account' %}" class="dropdown-item">My Account</a>
+
                         {% endif %}
 
                     </div>

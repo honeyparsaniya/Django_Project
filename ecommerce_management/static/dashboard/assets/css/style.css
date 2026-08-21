@@ -1616,3 +1616,495 @@ html[data-theme="dark"] {
   border-top-color: var(--admin-sidebar-border);
   color: var(--admin-sidebar-text);
 }
+/* =========================================================
+   COMPACT ACCOUNT OVERVIEW
+========================================================= */
+
+.account-overview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+
+/* Small overview boxes */
+.account-overview-list .mini-card {
+    min-height: 0;
+    height: auto;
+    padding: 12px 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* Label */
+.account-overview-list .mini-card span {
+    margin: 0;
+    font-size: 14px;
+}
+
+
+/* Value */
+.account-overview-list .mini-card strong {
+    margin: 0;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   ACCOUNT OVERVIEW PANEL
+========================================================= */
+
+.account-overview-panel {
+    height: auto !important;
+}
+
+
+/* Reduce header spacing */
+.account-overview-panel .panel-header {
+    padding-bottom: 12px;
+}
+
+/* =========================================================
+   LOGIN HISTORY PANEL - SAME 3D STYLE
+   ========================================================= */
+
+.login-history-panel {
+    margin-top: 1rem;
+    
+    /* Same raised / 3D effect */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.12),
+        0 2px 6px rgba(0, 0, 0, 0.08);
+
+    overflow: hidden;
+
+    background: var(--bs-body-bg);
+}
+/* =========================================================
+   LOGIN HISTORY PANEL
+   ========================================================= */
+
+.login-history-panel {
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   LOGIN HISTORY SCROLL
+   ========================================================= */
+
+.login-history-scroll {
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+
+/* =========================================================
+   STICKY TABLE HEADER
+   ========================================================= */
+
+.login-history-scroll thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    background: var(--bs-body-bg);
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   TABLE ROW
+   ========================================================= */
+
+.login-history-scroll tbody tr {
+    height: 58px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.login-history-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.login-history-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+}
+
+.login-history-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+/* =========================================================
+   PROFILE SETTINGS
+   ========================================================= */
+
+.profile-settings-panel {
+    overflow: hidden;
+}
+
+
+/* ---------------------------------------------------------
+   HEADER
+   --------------------------------------------------------- */
+
+.profile-settings-header {
+    padding-bottom: 18px;
+}
+
+
+/* ---------------------------------------------------------
+   FORM
+   --------------------------------------------------------- */
+
+.profile-form {
+    padding: 4px 0 0;
+}
+
+
+/* ---------------------------------------------------------
+   LABEL
+   --------------------------------------------------------- */
+
+.profile-form-label {
+    display: block;
+    margin-bottom: 7px;
+
+    font-size: 0.88rem;
+    font-weight: 600;
+
+    color: var(--bs-body-color);
+}
+
+
+/* ---------------------------------------------------------
+   INPUTS
+   --------------------------------------------------------- */
+
+.profile-input {
+    width: 100%;
+
+    min-height: 44px;
+
+    border-radius: 9px;
+
+    padding: 10px 13px;
+
+    font-size: 0.92rem;
+
+    border: 1px solid var(--bs-border-color);
+
+    background-color: var(--bs-body-bg);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+/* INPUT FOCUS */
+
+.profile-input:focus {
+    border-color: var(--bs-primary);
+
+    box-shadow:
+        0 0 0 3px rgba(
+            var(--bs-primary-rgb),
+            0.10
+        );
+
+    outline: none;
+}
+
+
+/* SELECT */
+
+select.profile-input {
+    cursor: pointer;
+}
+
+
+/* ---------------------------------------------------------
+   CHECKBOX
+   --------------------------------------------------------- */
+
+.profile-checkbox-box {
+    margin-top: 2px;
+
+    padding: 11px 13px;
+
+    border: 1px solid var(--bs-border-color);
+
+    border-radius: 9px;
+
+    background: var(--bs-tertiary-bg);
+}
+
+
+.profile-checkbox-box .form-check {
+    margin: 0;
+}
+
+
+.profile-checkbox-box .form-check-label {
+    font-size: 0.88rem;
+
+    color: var(--bs-secondary-color);
+
+    cursor: pointer;
+}
+
+
+.profile-checkbox-box .form-check-label span {
+    color: var(--bs-primary);
+
+    font-weight: 600;
+}
+
+
+.profile-checkbox-box .form-check-input {
+    margin-top: 0.2rem;
+
+    cursor: pointer;
+}
+
+
+/* ---------------------------------------------------------
+   PROFILE IMAGE UPLOAD
+   --------------------------------------------------------- */
+
+.profile-image-upload {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 62px;
+
+    padding: 10px 12px;
+
+    border: 1px dashed var(--bs-border-color);
+
+    border-radius: 10px;
+
+    background: var(--bs-tertiary-bg);
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.profile-image-upload:hover {
+    border-color: var(--bs-primary);
+
+    background: rgba(
+        var(--bs-primary-rgb),
+        0.03
+    );
+}
+
+
+/* IMAGE ICON */
+
+.profile-image-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: rgba(
+        var(--bs-primary-rgb),
+        0.10
+    );
+
+    color: var(--bs-primary);
+
+    font-size: 1.1rem;
+}
+
+
+/* IMAGE CONTENT */
+
+.profile-image-content {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.profile-image-title {
+    font-size: 0.88rem;
+
+    font-weight: 600;
+
+    color: var(--bs-body-color);
+}
+
+
+.profile-image-text {
+    margin-top: 2px;
+
+    font-size: 0.76rem;
+
+    color: var(--bs-secondary-color);
+}
+
+
+/* CHOOSE IMAGE BUTTON */
+
+.profile-image-button {
+    flex-shrink: 0;
+
+    padding: 7px 12px;
+
+    border-radius: 7px;
+
+    font-size: 0.78rem;
+
+    font-weight: 600;
+
+    color: var(--bs-primary);
+
+    background: rgba(
+        var(--bs-primary-rgb),
+        0.08
+    );
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.profile-image-button:hover {
+    color: #fff;
+
+    background: var(--bs-primary);
+}
+
+
+/* HIDE REAL FILE INPUT */
+
+.profile-image-input {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+   FORM ERROR
+   --------------------------------------------------------- */
+
+.profile-error {
+    margin-top: 5px;
+
+    font-size: 0.75rem;
+
+    color: var(--bs-danger);
+}
+
+
+/* ---------------------------------------------------------
+   FORM FOOTER
+   --------------------------------------------------------- */
+
+.profile-form-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    margin-top: 22px;
+
+    padding-top: 17px;
+
+    border-top: 1px solid var(--bs-border-color);
+}
+
+
+/* ---------------------------------------------------------
+   SAVE BUTTON
+   --------------------------------------------------------- */
+
+.profile-save-button {
+    min-width: 145px;
+
+    min-height: 42px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 8px;
+
+    font-size: 0.88rem;
+
+    font-weight: 600;
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 575.98px) {
+
+    .profile-form {
+        padding-top: 0;
+    }
+
+
+    .profile-image-upload {
+        align-items: flex-start;
+    }
+
+
+    .profile-image-button {
+        padding: 7px 9px;
+    }
+
+
+    .profile-save-button {
+        width: 100%;
+    }
+
+
+    .profile-form-footer {
+        display: block;
+    }
+
+}

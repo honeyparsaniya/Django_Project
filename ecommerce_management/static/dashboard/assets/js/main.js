@@ -160,7 +160,12 @@
       if (sidebarAvatar && user.avatar) { sidebarAvatar.src = user.avatar; sidebarAvatar.alt = user.name; }
 
       Array.prototype.forEach.call(profileNameEls, function (el) { el.textContent = user.name; });
-      Array.prototype.forEach.call(profileAvatarEls, function (img) { if (user.avatar) img.src = user.avatar; if (user.name) img.alt = user.name; });
+      Array.prototype.forEach.call(profileAvatarEls, function (img) {
+        if (user.avatar) {
+          img.src = user.avatar;
+          img.alt = user.name;
+        }
+      });
     }
 
     initUserProfile();
@@ -238,3 +243,59 @@
     }
   });
 })();
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput = document.querySelector(
+        '[data-table-search="usersTable"]'
+    );
+
+    const table = document.getElementById("usersTable");
+
+    if (!searchInput || !table) {
+        return;
+    }
+
+    const tbody = table.querySelector("tbody");
+
+    if (!tbody) {
+        return;
+    }
+
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+
+    searchInput.addEventListener("input", function () {
+
+        const searchValue = this.value
+            .trim()
+            .toLowerCase();
+
+        let visibleRows = 0;
+
+        rows.forEach(function (row) {
+
+            // Skip special rows such as "No users found"
+            if (row.querySelector("td[colspan]")) {
+                return;
+            }
+
+            const rowText = row.textContent
+                .replace(/\s+/g, " ")
+                .trim()
+                .toLowerCase();
+
+            const matched =
+                searchValue === "" ||
+                rowText.includes(searchValue);
+
+            row.classList.toggle("d-none", !matched);
+
+            if (matched) {
+                visibleRows++;
+            }
+
+        });
+
+    });
+
+});

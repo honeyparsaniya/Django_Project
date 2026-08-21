@@ -125,87 +125,109 @@
               <table class="table align-middle mb-0">
                 <thead><tr><th scope="col">User</th><th scope="col">Role</th><th scope="col">Team</th><th scope="col">Status</th><th scope="col">Joined</th><th scope="col" class="text-end">Action</th></tr></thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src=".{% static 'Dashboard/asset/images/avatar/avatar-1.jpg' %}" alt="Sarah Ahmed">
-                        <div>
-                          <p class="fw-semibold mb-0">Sarah Ahmed</p>
-                          <p class="text-muted small mb-0">sarah@example.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Admin</td>
-                    <td>Operations</td>
-                    <td><span class="badge text-bg-success">Active</span></td>
-                    <td>Jan 12, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="{% url 'user_details' %}">View</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src=".{% static 'Dashboard/asset/images/avatar/avatar-2.jpg' %}" alt="Rafi Khan">
-                        <div>
-                          <p class="fw-semibold mb-0">Rafi Khan</p>
-                          <p class="text-muted small mb-0">rafi@example.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Manager</td>
-                    <td>Sales</td>
-                    <td><span class="badge text-bg-success">Active</span></td>
-                    <td>Feb 03, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="{% url 'user_details' %}">View</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src=".{% static 'Dashboard/asset/images/avatar/avatar-3.jpg' %}" alt="Nadia Islam">
-                        <div>
-                          <p class="fw-semibold mb-0">Nadia Islam</p>
-                          <p class="text-muted small mb-0">nadia@example.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Editor</td>
-                    <td>Content</td>
-                    <td><span class="badge text-bg-warning">Pending</span></td>
-                    <td>Mar 18, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="{% url 'user_details' %}">View</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src=".{% static 'Dashboard/asset/images/avatar/avatar-4.jpg' %}" alt="Mina Torres">
-                        <div>
-                          <p class="fw-semibold mb-0">Mina Torres</p>
-                          <p class="text-muted small mb-0">mina@example.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Viewer</td>
-                    <td>Finance</td>
-                    <td><span class="badge text-bg-secondary">Suspended</span></td>
-                    <td>Apr 07, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="{% url 'user_details' %}">View</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src=".{% static 'Dashboard/asset/images/avatar/avatar-5.jpg' %}" alt="Jon Oliver">
-                        <div>
-                          <p class="fw-semibold mb-0">Jon Oliver</p>
-                          <p class="text-muted small mb-0">jon@example.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Analyst</td>
-                    <td>Data</td>
-                    <td><span class="badge text-bg-success">Active</span></td>
-                    <td>Apr 22, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="{% url 'user_details' %}">View</a></td>
-                  </tr>
-                </tbody>
+
+    {% for user in users %}
+
+    <tr>
+
+        <td>
+            <div class="d-flex align-items-center gap-2">
+
+                 {% if user.image %}
+
+    <img
+        class="avatar-img avatar-sm"
+        src="{{ user.image.url }}"
+        alt="{{ user.username }}"
+    >
+
+{% else %}
+
+     <div class="avatar-img avatar-sm d-flex align-items-center justify-content-center fw-semibold bg-primary text-white rounded-circle">
+        {{ user.username|first|upper }}
+    </div>
+
+{% endif %}
+                <div>
+
+                    <p class="fw-semibold mb-0">
+
+                        {% if user.first_name or user.last_name %}
+                            {{ user.first_name }} {{ user.last_name }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+
+                    </p>
+
+                    <p class="text-muted small mb-0">
+                        {{ user.email }}
+                    </p>
+
+                </div>
+
+            </div>
+        </td>
+
+
+        <td>
+            {{ user.get_role_display }}
+        </td>
+
+
+        <td>
+            -
+        </td>
+
+
+        <td>
+
+            {% if user.is_active %}
+
+                <span class="badge text-bg-success">
+                    Active
+                </span>
+
+            {% else %}
+
+                <span class="badge text-bg-secondary">
+                    Inactive
+                </span>
+
+            {% endif %}
+
+        </td>
+
+
+        <td>
+            {{ user.date_joined|date:"M d, Y" }}
+        </td>
+
+
+        <td class="text-end">
+
+            <a
+                class="btn btn-light btn-sm"
+                href="{% url 'user_details' user.id %}"
+            >
+                View
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="6" class="text-center text-muted">
+            No users found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</tbody>
               </table>
             </div>
           </section>

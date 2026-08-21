@@ -33,7 +33,7 @@ class UserAdmin(admin.ModelAdmin):
 class LoginHistoryAdmin(admin.ModelAdmin):
 
     list_display = (
-        "user",
+        "username",
         "login_time",
         "logout_time",
         "duration",
@@ -49,6 +49,9 @@ class LoginHistoryAdmin(admin.ModelAdmin):
         "user__email",
         "user__contact_number",
     )
+    @admin.display(description="Username")
+    def username(self, obj):
+        return obj.user.username if obj.user_id else "-"
 
 
 @admin.register(OTP)

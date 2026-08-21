@@ -1,40 +1,750 @@
 {% extends "dashboard/base.html" %}
+
 {% load static %}
+
 {% block content %}
-      <main class="dashboard-content">
-        <div class="container-fluid px-3 px-lg-4 py-4">
-          <div class="page-heading">
+
+<main class="dashboard-content">
+
+    <div class="container-fluid px-3 px-lg-4 py-4">
+
+        <!-- PAGE HEADING -->
+        <div class="page-heading">
+
             <div class="page-heading-copy">
-              <span class="page-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
-              <div>
-                <p class="eyebrow mb-1">Account</p>
-                <h1 class="h3 mb-1">Profile</h1>
-                <p class="text-muted mb-0">Manage your personal details, bio, and contact preferences.</p>
-              </div>
-            </div>
-            
-          </div>
 
-          <section class="row g-3">
-            <div class="col-12 col-xl-4">
-              <div class="panel h-100 text-center profile-card">
-                <div class="profile-cover"><img src=".{% static 'Dashboard/assets/images/png/dasher-ui-bootstrap-5.jpg' %}" alt="adminHMD dashboard preview"></div>
-                <img class="avatar-img avatar-xl profile-photo" src=".{% static 'Dashboard/assets/images/avatar/avatar.jpg' %}" alt="Admin Hasan">
-                <h2 class="h5 mt-3 mb-1">Admin Hasan</h2>
-                <p class="text-muted mb-3">Product Administrator</p>
-                <div class="d-flex justify-content-center gap-2"><span class="badge text-bg-primary">Admin</span><span class="badge text-bg-success">Verified</span></div>
-                <div class="info-list mt-4 text-start"><div><span>Email</span><strong>admin@example.com</strong></div><div><span>Department</span><strong>Product Ops</strong></div><div><span>Time Zone</span><strong>Asia/Dhaka</strong></div></div>
-              </div>
+                <span class="page-icon">
+                    <i class="bi bi-person-badge" aria-hidden="true"></i>
+                </span>
+
+                <div>
+                    <p class="eyebrow mb-1">Account</p>
+
+                    <h1 class="h3 mb-1">
+                        Profile
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Manage your personal details, bio, and contact preferences.
+                    </p>
+                </div>
+
             </div>
-            <div class="col-12 col-xl-8">
-              <form class="panel needs-validation" novalidate>
-                <div class="panel-header"><div><h2 class="h5 mb-1 section-title"><i class="bi bi-person-gear" aria-hidden="true"></i><span>Profile Settings</span></h2><p class="text-muted mb-0">Update your account profile and contact details.</p></div></div>
-                <div class="row g-3"><div class="col-md-6"><label class="form-label" for="profileName">Name</label><input class="form-control" id="profileName" type="text" value="Admin Hasan" required><div class="invalid-feedback">Name is required.</div></div><div class="col-md-6"><label class="form-label" for="profileEmail">Email</label><input class="form-control" id="profileEmail" type="email" value="admin@example.com" required><div class="invalid-feedback">Enter a valid email.</div></div><div class="col-12"><label class="form-label" for="profileBio">Bio</label><textarea class="form-control" id="profileBio" rows="5">Focused on clean admin workflows, reusable UI systems, and reliable operations.</textarea></div></div>
-                <div class="d-flex justify-content-end mt-4"><button class="btn btn-primary" type="submit"><i class="bi bi-check2-circle" aria-hidden="true"></i> Save Profile</button></div>
-              </form>
-            </div>
-          </section>
+
         </div>
-      </main>
 
-      {% endblock content %}
+
+        <!-- PROFILE SECTION -->
+        <section class="row g-3">
+
+            <!-- LEFT PROFILE CARD -->
+            <div class="col-12 col-xl-4">
+
+                <div class="panel h-100 text-center profile-card">
+
+                    <!-- COVER IMAGE -->
+                    <div class="profile-cover">
+
+                        <img
+                            src="{% static 'Dashboard/assets/images/png/dasher-ui-bootstrap-5.avif' %}"
+                            alt="Dashboard preview"
+                        >
+
+                    </div>
+
+
+                    <!-- ADMIN PROFILE IMAGE -->
+                    {% if request.user.image %}
+
+                        <img
+                            class="avatar-img avatar-xl profile-photo"
+                            src="{{ request.user.image.url }}"
+                            alt="{{ request.user.username }}"
+                        >
+
+                    {% else %}
+
+                        <div class="avatar-img avatar-xl profile-photo profile-avatar-placeholder">
+                            {{ request.user.username|first|upper }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- ADMIN NAME -->
+                    <h2 class="h5 mt-3 mb-1">
+
+                        {% if request.user.first_name or request.user.last_name %}
+
+                            {{ request.user.first_name }}
+                            {{ request.user.last_name }}
+
+                        {% else %}
+
+                            {{ request.user.username }}
+
+                        {% endif %}
+
+                    </h2>
+
+
+                    <!-- ROLE -->
+                    <p class="text-muted mb-3">
+                        {{ request.user.role|title }}
+                    </p>
+
+
+                    <!-- BADGES -->
+                    <div class="d-flex justify-content-center gap-2">
+
+                        <span class="badge text-bg-primary">
+                            {{ request.user.role|title }}
+                        </span>
+
+                        {% if request.user.is_active %}
+
+                            <span class="badge text-bg-success">
+                                Active
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ADMIN INFORMATION -->
+                    <div class="info-list mt-4 text-start">
+
+                        <!-- EMAIL -->
+                        <div>
+                            <span>Email</span>
+
+                            <strong>
+                                {{ request.user.email|default:"Not available" }}
+                            </strong>
+                        </div>
+
+
+                        <!-- USERNAME -->
+                        <div>
+                            <span>Username</span>
+
+                            <strong>
+                                {{ request.user.username }}
+                            </strong>
+                        </div>
+
+
+                        <!-- CONTACT -->
+                        {% if request.user.contact_number %}
+
+                        <div>
+                            <span>Contact</span>
+
+                            <strong>
+                                {{ request.user.contact_number }}
+                            </strong>
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT PROFILE SETTINGS -->
+<!-- ========================================= -->
+<!-- RIGHT PROFILE SETTINGS -->
+<!-- ========================================= -->
+
+<div class="col-12 col-xl-8">
+
+    <div class="panel profile-settings-panel">
+
+        <!-- ===================================== -->
+        <!-- HEADER -->
+        <!-- ===================================== -->
+
+        <div class="panel-header profile-settings-header">
+
+            <div>
+
+                <h2 class="h5 mb-1 section-title">
+
+                    <i
+                        class="bi bi-person-gear"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>
+                        Profile Settings
+                    </span>
+
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Update your admin account information.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ===================================== -->
+        <!-- PROFILE FORM -->
+        <!-- ===================================== -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="profile-form"
+            action="{% url 'profile' %}"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- ===================================== -->
+            <!-- FORM NON FIELD ERRORS -->
+            <!-- ===================================== -->
+
+            {% if form.non_field_errors %}
+
+                <div class="alert alert-danger mb-3">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="row g-3">
+
+
+                <!-- ================================= -->
+                <!-- FIRST NAME -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="id_first_name"
+                        class="profile-form-label"
+                    >
+                        First Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="first_name"
+                        id="id_first_name"
+                        class="form-control profile-input"
+                        value="{{ form.first_name.value|default:'' }}"
+                        placeholder="Enter first name"
+                    >
+
+                    {% if form.first_name.errors %}
+
+                        <div class="profile-error">
+                            {{ form.first_name.errors|striptags }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- LAST NAME -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="id_last_name"
+                        class="profile-form-label"
+                    >
+                        Last Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="last_name"
+                        id="id_last_name"
+                        class="form-control profile-input"
+                        value="{{ form.last_name.value|default:'' }}"
+                        placeholder="Enter last name"
+                    >
+
+                    {% if form.last_name.errors %}
+
+                        <div class="profile-error">
+                            {{ form.last_name.errors|striptags }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- USERNAME -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="id_username"
+                        class="profile-form-label"
+                    >
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        id="id_username"
+                        class="form-control profile-input"
+                        value="{{ request.user.username }}"
+                        
+                        autocomplete="username"
+                    >
+
+                    {% if form.username.errors %}
+
+                        <div class="profile-error">
+                            {{ form.username.errors|striptags }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- EMAIL -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="id_email"
+                        class="profile-form-label"
+                    >
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        id="id_email"
+                        class="form-control profile-input"
+                        value="{{ form.email.value|default:'' }}"
+                        placeholder="Enter email"
+                        autocomplete="email"
+                    >
+
+                    {% if form.email.errors %}
+
+                        <div class="profile-error">
+                            {{ form.email.errors|striptags }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- CONTACT NUMBER -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="id_contact_number"
+                        class="profile-form-label"
+                    >
+                        Contact Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        name="contact_number"
+                        id="id_contact_number"
+                        class="form-control profile-input"
+                        value="{{ request.user.contact_number }}"
+                        readonly
+                    >
+
+                    {% if form.contact_number.errors %}
+
+                        <div class="profile-error">
+                            {{ form.contact_number.errors|striptags }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- ROLE -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="id_role"
+                        class="profile-form-label"
+                    >
+                        Role
+                    </label>
+
+                    <input
+                        type="text"
+                        id="id_role"
+                        class="form-control profile-input"
+                        value="{{ request.user.get_role_display }}"
+                        readonly
+                    >
+
+                    {% if form.role.errors %}
+
+                        <div class="profile-error">
+                            {{ form.role.errors|striptags }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- TERMS AND CONDITIONS -->
+                <!-- ================================= -->
+
+                <div class="col-12">
+
+                    <div class="profile-checkbox-box">
+
+                        <div class="form-check">
+
+                            <input
+                                type="checkbox"
+                                name="read_terms_and_conditions"
+                                id="id_read_terms_and_conditions"
+                                class="form-check-input"
+
+                                {% if form.read_terms_and_conditions.value %}
+                                    checked
+                                {% endif %}
+                            >
+
+                            <label
+                                for="id_read_terms_and_conditions"
+                                class="form-check-label"
+                            >
+
+                                I have read and accepted the
+
+                                <span>
+                                    terms and conditions
+                                </span>.
+
+                            </label>
+
+                        </div>
+
+                        {% if form.read_terms_and_conditions.errors %}
+
+                            <div class="profile-error mt-2">
+                                {{ form.read_terms_and_conditions.errors|striptags }}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- PROFILE IMAGE -->
+                <!-- ================================= -->
+
+                <div class="col-12">
+
+                    <label
+                        for="id_image"
+                        class="profile-form-label"
+                    >
+                        Profile Image
+                    </label>
+
+
+                    <div class="profile-image-upload">
+
+
+                        <!-- IMAGE ICON -->
+
+                        <div class="profile-image-icon">
+
+                            <i
+                                class="bi bi-image"
+                                aria-hidden="true"
+                            ></i>
+
+                        </div>
+
+
+                        <!-- IMAGE CONTENT -->
+
+                        <div class="profile-image-content">
+
+                            <div class="profile-image-title">
+                                Change profile image
+                            </div>
+
+                            <div class="profile-image-text">
+                                JPG, JPEG or PNG
+                            </div>
+
+                        </div>
+
+
+                        <!-- CHOOSE BUTTON -->
+
+                        <label
+                            for="id_image"
+                            class="profile-image-button"
+                        >
+                            Choose Image
+                        </label>
+
+
+                        <!-- FILE INPUT -->
+
+                        <input
+                            type="file"
+                            name="image"
+                            id="id_image"
+                            accept="image/*"
+                            class="profile-image-input"
+                        >
+
+                    </div>
+
+
+                    {% if form.image.errors %}
+
+                        <div class="profile-error mt-2">
+                            {{ form.image.errors|striptags }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- SAVE BUTTON -->
+            <!-- ================================= -->
+
+            <div class="profile-form-footer">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary profile-save-button"
+                >
+
+                    <i
+                        class="bi bi-check2-circle"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>
+                        Save Profile
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- ========================================= -->
+<!-- LOGIN HISTORY -->
+<!-- ========================================= -->
+
+<div class="panel login-history-panel mt-3">
+
+    <!-- HEADER -->
+    <div class="panel-header">
+
+        <div>
+
+            <h2 class="h5 mb-1 section-title">
+                <i
+                    class="bi bi-clock-history"
+                    aria-hidden="true"
+                ></i>
+
+                <span>
+                    Login History
+                </span>
+            </h2>
+
+            <p class="text-muted mb-0">
+                Recent login and logout activity of this admin.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCROLLABLE TABLE -->
+    <div class="login-history-scroll">
+
+        <table class="table align-middle mb-0">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Login Time</th>
+                    <th>Logout Time</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for history in login_history %}
+
+                <tr>
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+                    <td>
+                        <span class="fw-semibold">
+                            {{ history.login_time|date:"M d, Y" }}
+                        </span>
+                        <br>
+                        <small class="text-muted">
+                            {{ history.login_time|date:"h:i A" }}
+                        </small>
+                    </td>
+
+                    <td>
+
+                        {% if history.logout_time %}
+
+                            <span class="fw-semibold">
+                                {{ history.logout_time|date:"M d, Y" }}
+                            </span>
+
+                            <br>
+
+                            <small class="text-muted">
+                                {{ history.logout_time|date:"h:i A" }}
+                            </small>
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if history.duration %}
+
+                            {{ history.duration }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if history.logout_time %}
+
+                            <span class="badge text-bg-secondary">
+                                Logged Out
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge text-bg-success">
+                                Active Session
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="text-center py-4"
+                    >
+
+                        <div class="text-muted">
+
+                            <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+
+                            <p class="mb-0">
+                                No login history found.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+       </div>
+
+    </div>
+
+</main>
+
+{% endblock content %}
